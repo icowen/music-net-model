@@ -42,5 +42,5 @@ function onBatchEnd(batch, logs) {
 }
 
 model()
-    .then(model => model.save('file://./model-1b'))
+    .then(model => model.save('file://./model-1c'))
     .then(res => console.error('res:', res));
