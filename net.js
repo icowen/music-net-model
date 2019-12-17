@@ -3,8 +3,8 @@ const tf = require('@tensorflow/tfjs');
 require('@tensorflow/tfjs-node');
 
 async function model() {
-    let x_train = await fetch('input_notes.json').then(res => res.json());
-    let y_train = await fetch('output_notes.json').then(res => res.json());
+    let x_train = await fetch('all_input_notes.json').then(res => res.json());
+    let y_train = await fetch('all_output_notes.json').then(res => res.json());
     let x = [];
     for (let i in x_train) {
         x.push(x_train[i])
