@@ -17,7 +17,7 @@ async function model() {
     const model = tf.sequential({
         layers: [
             // tf.layers.flatten({units: 1, inputShape: [256]}),
-            tf.layers.dense({inputShape: [256], units: 100, activation: 'sigmoid'}),
+            tf.layers.dense({inputShape: [256], units: 256, activation: 'sigmoid'}),
             tf.layers.dense({units: 128, activation: 'sigmoid'})
         ]
     });
