@@ -7,6 +7,7 @@ async function model() {
     let y_train = await fetch('all_output_notes.json').then(res => res.json());
     let numOfTrainingSongs = 10;
     let x = [];
+
     for (let i = 0; i < numOfTrainingSongs; i++) {
         x.push(x_train[i])
     }
@@ -17,27 +18,27 @@ async function model() {
 
     const model = tf.sequential({
         layers: [
-            // tf.layers.flatten({units: 1, inputShape: [256]}),
-            tf.layers.dense({inputShape: [256], units: 256, activation: 'sigmoid'}),
+            tf.layers.dense({inputShape: [256], units: 100, activation: 'sigmoid'}),
             tf.layers.dense({units: 128, activation: 'sigmoid'})
         ]
     });
     model.compile({
         optimizer: 'adam',
-        loss: 'categoricalCrossentropy',
+        loss: tf.losses.logLoss,
         metrics: ['accuracy']
     });
     model.fit(tf.tensor2d(x), tf.tensor2d(y), {
-        epochs: 10000,
+        epochs: 0,
         batchSize: 1,
-        validationSplit: .8
+        validationSplit: .8,
+        callbacks: tf.callbacks.earlyStopping({monitor: 'val_loss'})
     }).then(info => {
-        console.log('Final accuracy', info.history.acc);
+        console.log('Final loss:', info.history.val_loss);
     });
 
     return model;
 }
 
 model()
-    .then(model => model.save('file://./model-1c'))
+    .then(model => model.save('file://./model-untrained'))
     .then(res => console.error('res:', res));
