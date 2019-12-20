@@ -5,12 +5,13 @@ require('@tensorflow/tfjs-node');
 async function model() {
     let x_train = await fetch('all_input_notes.json').then(res => res.json());
     let y_train = await fetch('all_output_notes.json').then(res => res.json());
+    let numOfTrainingSongs = 10;
     let x = [];
-    for (let i in x_train) {
+    for (let i = 0; i < numOfTrainingSongs; i++) {
         x.push(x_train[i])
     }
     let y = [];
-    for (let i in y_train) {
+    for (let i = 0; i < numOfTrainingSongs; i++) {
         y.push(y_train[i])
     }
 
@@ -28,17 +29,13 @@ async function model() {
     });
     model.fit(tf.tensor2d(x), tf.tensor2d(y), {
         epochs: 10000,
-        validationSplit: .8,
-        callbacks: {onBatchEnd}
+        batchSize: 1,
+        validationSplit: .8
     }).then(info => {
         console.log('Final accuracy', info.history.acc);
     });
 
     return model;
-}
-
-function onBatchEnd(batch, logs) {
-    console.log('Accuracy', logs.acc);
 }
 
 model()
